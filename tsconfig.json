@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "incremental": true,
+    "target": "es2017",
+    "module": "es6",
+    "lib": [
+      "dom",
+      "esnext"
+    ],
+    "outDir": "assets/dist",
+    "baseUrl": "src",
+    "strict": true,
+    "sourceMap": true
+  }
+}

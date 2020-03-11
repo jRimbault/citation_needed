@@ -2,12 +2,45 @@ import { createNode } from 'dom'
 
 function main() {
   const addButton = document.getElementById('add-player') as HTMLButtonElement | null
+  const resetButton = document.getElementById('reset') as HTMLButtonElement | null
+  const saveButton = document.getElementById('save') as HTMLButtonElement | null
   const playerNameInput = document.getElementById('player-name') as HTMLInputElement | null
   const playerListElement = document.getElementById('player-list') as HTMLUListElement | null
   assert(addButton)
+  assert(resetButton)
+  assert(saveButton)
   assert(playerNameInput)
   assert(playerListElement)
-  addButton.addEventListener('click', addPlayer(new Map(), playerListElement, playerNameInput))
+  const scores = getInitialState()
+  initPlayingBoard(scores, playerListElement)
+  addButton.addEventListener('click', addPlayer(scores, playerListElement, playerNameInput))
+  resetButton.addEventListener('click', () => {
+    scores.clear()
+    Array.from(playerListElement.children).forEach(c => c.remove())
+    localStorage.removeItem('scores')
+  })
+  saveButton.addEventListener('click', () => {
+    const json: Record<string, number> = {}
+    for (const [playerName, playerScore] of scores.entries()) {
+      json[playerName] = playerScore
+    }
+    localStorage.setItem('scores', JSON.stringify(json))
+  })
+}
+
+function getInitialState() {
+  const json: Record<string, number> = JSON.parse(localStorage.getItem('scores') || '{}')
+  const scores = new Map<string, number>()
+  for (const [playerName, playerScore] of Object.entries(json)) {
+    scores.set(playerName, playerScore)
+  }
+  return scores
+}
+
+function initPlayingBoard(scores: Map<string, number>, list: HTMLUListElement) {
+  for (const playerName of scores.keys()) {
+    list.append(makePlayerListItem(playerName, scores))
+  }
 }
 
 function addPlayer(scores: Map<string, number>, list: HTMLUListElement, input: HTMLInputElement) {
@@ -21,8 +54,11 @@ function addPlayer(scores: Map<string, number>, list: HTMLUListElement, input: H
 }
 
 function makePlayerListItem(playerName: string, scores: Map<string, number>) {
-  scores.set(playerName, 0)
-  const score = createNode('span', { textContent: '0' })
+  const initScore = scores.get(playerName) || 0
+  if (!initScore) {
+    scores.set(playerName, 0)
+  }
+  const score = createNode('span', { textContent: initScore.toString() })
   return createNode('li', {
     textContent: `${playerName} : `,
     children: [

@@ -22,6 +22,7 @@ function main() {
     state.clear(scores)
   })
   saveButton.addEventListener('click', () => state.set(scores))
+  const _ = new Audio('sounds/ding-sound-effect_2.mp3') // prefetch
 }
 
 function initialPlayingBoard(scores: Map<string, number>) {

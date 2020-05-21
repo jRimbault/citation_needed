@@ -1,6 +1,7 @@
 import { createNode } from 'dom'
 
 type StateManager = ReturnType<typeof stateManager>
+const DING = 'sounds/ding-sound-effect_2.mp3'
 
 function main() {
   const addButton = document.getElementById('add-player') as HTMLButtonElement | null
@@ -22,7 +23,13 @@ function main() {
     state.clear(scores)
   })
   saveButton.addEventListener('click', () => state.set(scores))
-  const _ = new Audio('sounds/ding-sound-effect_2.mp3') // prefetch
+  prefetchDing()
+}
+
+function prefetchDing() {
+  const ding = new Audio(DING)
+  ding.volume = 0
+  ding.play()
 }
 
 function initialPlayingBoard(scores: Map<string, number>) {
@@ -71,7 +78,7 @@ function incrementScore(scores: Map<string, number>, playerName: string, scoreDi
     const newScore = oldScore + 1
     scores.set(playerName, newScore)
     scoreDisplay(newScore)
-    new Audio('sounds/ding-sound-effect_2.mp3').play()
+    new Audio(DING).play()
   }
 }
 

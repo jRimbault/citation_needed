@@ -1,8 +1,6 @@
 type EventNames = keyof HTMLElementEventMap
-interface EventHandler<Event extends EventNames> {
-  readonly callback: (this: HTMLObjectElement, $event: HTMLElementEventMap[Event]) => unknown
-  readonly options?: boolean | EventListenerOptions
-}
+type Handler<Event extends EventNames> = (this: HTMLObjectElement, $event: HTMLElementEventMap[Event]) => unknown
+type EventHandler<Event extends EventNames> = readonly [Handler<Event>, boolean | EventListenerOptions] | Handler<Event>
 
 export type NodeDefinition =
   | readonly [keyof HTMLElementTagNameMap, NodeOptions]
@@ -57,9 +55,11 @@ type Entry = [EventNames, EventHandler<EventNames> | undefined]
 
 function addListeners<E extends HTMLElement>(node: E, listeners?: NodeOptions['listeners']): E {
   if (listeners) {
-    for (const [name, handler] of Object.entries(listeners) as Entry[]) {
-      if (handler) {
-        node.addEventListener(name, handler.callback, handler.options)
+    for (const [name, listener] of Object.entries(listeners) as Entry[]) {
+      if (listener instanceof Array) {
+        node.addEventListener(name, listener[0], listener[1])
+      } else if (listener instanceof Function) {
+        node.addEventListener(name, listener)
       }
     }
   }

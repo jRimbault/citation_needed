@@ -1,35 +1,27 @@
 import { createNode } from 'dom'
 
 type StateManager = ReturnType<typeof stateManager>
+type StaticHtml = ReturnType<typeof getStaticHtmlElements>
+
 const DING = 'sounds/ding-sound-effect_2.mp3'
 
-function main() {
-  const addButton = document.getElementById('add-player') as HTMLButtonElement | null
-  const resetButton = document.getElementById('reset') as HTMLButtonElement | null
-  const saveButton = document.getElementById('save') as HTMLButtonElement | null
-  const playerNameInput = document.getElementById('player-name') as HTMLInputElement | null
-  const playerListElement = document.getElementById('player-list') as HTMLUListElement | null
-  assert(addButton !== null)
-  assert(resetButton !== null)
-  assert(saveButton !== null)
-  assert(playerNameInput !== null)
-  assert(playerListElement !== null)
+function main({ add, reset, save, playerName, playerList }: StaticHtml) {
   const state: StateManager = stateManager()
   const scores = state.get()
-  playerListElement.append(...initialPlayingBoard(scores))
-  addButton.addEventListener('click', addPlayer(scores, playerListElement, playerNameInput))
-  resetButton.addEventListener('click', () => {
-    Array.from(playerListElement.children).forEach(c => c.remove())
+  playerList.append(...initialPlayingBoard(scores))
+  add.addEventListener('click', addPlayer(scores, playerList, playerName))
+  reset.addEventListener('click', () => {
+    Array.from(playerList.children).forEach(c => c.remove())
     state.clear(scores)
   })
-  saveButton.addEventListener('click', () => state.set(scores))
+  save.addEventListener('click', () => state.set(scores))
   prefetchDing()
 }
 
 function prefetchDing() {
   const ding = new Audio(DING)
   ding.volume = 0
-  ding.play()
+  ding.play().then(() => console.log('Ding cached.'))
 }
 
 function initialPlayingBoard(scores: Map<string, number>) {
@@ -61,9 +53,7 @@ function makePlayerListItem(playerName: string, scores: Map<string, number>) {
         {
           textContent: '+1',
           listeners: {
-            click: {
-              callback: incrementScore(scores, playerName, newScore => (score.textContent = newScore.toString())),
-            },
+            click: incrementScore(scores, playerName, newScore => (score.textContent = newScore.toString())),
           },
         },
       ],
@@ -114,4 +104,23 @@ function stateManager(storage: PartialStorage = localStorage) {
   } as const
 }
 
-window.onload = main
+function getStaticHtmlElements() {
+  function getByIdOptional<T extends HTMLElement = HTMLElement>(id: string): T | null {
+    return document.getElementById(id) as T | null
+  }
+  const add = getByIdOptional<HTMLButtonElement>('add-player')
+  const reset = getByIdOptional<HTMLButtonElement>('reset')
+  const save = getByIdOptional<HTMLButtonElement>('save')
+  const playerName = getByIdOptional<HTMLInputElement>('player-name')
+  const playerList = getByIdOptional<HTMLUListElement>('player-list')
+
+  assert(add !== null, 'Button to add player not found.')
+  assert(reset !== null, 'Button to erase game data not found.')
+  assert(save !== null, 'Button to save game data not found.')
+  assert(playerName !== null, "Text input for players's names not found.")
+  assert(playerList !== null, 'List element not found.')
+
+  return { add, reset, save, playerName, playerList } as const
+}
+
+window.onload = () => main(getStaticHtmlElements())

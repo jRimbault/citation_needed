@@ -6,7 +6,7 @@ type StaticHtml = ReturnType<typeof getStaticHtmlElements>
 const DING = 'sounds/ding-sound-effect_2.mp3'
 
 function main({ add, reset, save, playerName, playerList }: StaticHtml) {
-  const state: StateManager = stateManager()
+  const state = stateManager()
   const scores = state.get()
   playerList.append(...initialPlayingBoard(scores))
   add.addEventListener('click', addPlayer(scores, playerList, playerName))

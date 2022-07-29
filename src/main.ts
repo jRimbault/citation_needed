@@ -1,9 +1,11 @@
 import { createNode } from 'dom'
 
-type StateManager = ReturnType<typeof stateManager>
 type StaticHtml = ReturnType<typeof getStaticHtmlElements>
+interface Score {
+  score: number
+}
 
-const DING = 'sounds/ding-sound-effect_2.mp3'
+const DING = new Audio('sounds/ding-sound-effect_2.mp3')
 
 function main({ add, reset, save, playerName, playerList }: StaticHtml) {
   const state = stateManager()
@@ -19,16 +21,15 @@ function main({ add, reset, save, playerName, playerList }: StaticHtml) {
 }
 
 function prefetchDing() {
-  const ding = new Audio(DING)
-  ding.volume = 0
-  ding.play().then(() => console.log('Ding cached.'))
+  DING.volume = 0
+  DING.play().then(() => (DING.volume = 100))
 }
 
-function initialPlayingBoard(scores: Map<string, number>) {
+function initialPlayingBoard(scores: Map<string, Score>) {
   return Array.from(scores.keys(), playerName => makePlayerListItem(playerName, scores))
 }
 
-function addPlayer(scores: Map<string, number>, list: HTMLUListElement, input: HTMLInputElement) {
+function addPlayer(scores: Map<string, Score>, list: HTMLUListElement, input: HTMLInputElement) {
   return () => {
     const playerName = input.value
     if (playerName !== '' && !scores.has(playerName)) {
@@ -38,38 +39,29 @@ function addPlayer(scores: Map<string, number>, list: HTMLUListElement, input: H
   }
 }
 
-function makePlayerListItem(playerName: string, scores: Map<string, number>) {
-  const initScore = scores.get(playerName) || 0
-  if (!initScore) {
-    scores.set(playerName, 0)
-  }
-  const score = createNode('span', { textContent: initScore.toString() })
+function makePlayerListItem(playerName: string, scores: Map<string, Score>) {
+  const playerScore = scores.set(playerName, scores.get(playerName) ?? { score: 0 }).get(playerName)
+  assert(playerScore !== undefined)
+  const scoreNode = createNode('span', { textContent: playerScore.score.toString() })
   return createNode('li', {
     textContent: `${playerName} : `,
     children: [
-      score,
+      scoreNode,
       [
         'button',
         {
           textContent: '+1',
           listeners: {
-            click: incrementScore(scores, playerName, newScore => (score.textContent = newScore.toString())),
+            click: () => {
+              playerScore.score += 1
+              scoreNode.textContent = playerScore.score.toString()
+              ;(DING.cloneNode(true) as HTMLAudioElement).play()
+            },
           },
         },
       ],
     ],
   })
-}
-
-function incrementScore(scores: Map<string, number>, playerName: string, scoreDisplay: (newScore: number) => void) {
-  return () => {
-    const oldScore = scores.get(playerName)
-    assert(typeof oldScore === 'number')
-    const newScore = oldScore + 1
-    scores.set(playerName, newScore)
-    scoreDisplay(newScore)
-    new Audio(DING).play()
-  }
 }
 
 function assert(condition: unknown, msg?: string): asserts condition {
@@ -78,28 +70,27 @@ function assert(condition: unknown, msg?: string): asserts condition {
   }
 }
 
-type PartialStorage = Pick<Storage, 'getItem' | 'setItem' | 'removeItem'>
-function stateManager(storage: PartialStorage = localStorage) {
+function stateManager() {
   const storageKey = 'scores'
   return {
-    get: (): Map<string, number> => {
-      const json: Record<string, number> = JSON.parse(storage.getItem(storageKey) || '{}')
-      const scores = new Map<string, number>()
+    get: (): Map<string, Score> => {
+      const json: Record<string, Score> = JSON.parse(localStorage.getItem(storageKey) ?? '{}')
+      const scores = new Map<string, Score>()
       for (const [playerName, playerScore] of Object.entries(json)) {
         scores.set(playerName, playerScore)
       }
       return scores
     },
-    set: (scores: Map<string, number>) => {
-      const json: Record<string, number> = {}
+    set: (scores: Map<string, Score>) => {
+      const json: Record<string, Score> = {}
       for (const [playerName, playerScore] of scores.entries()) {
         json[playerName] = playerScore
       }
-      storage.setItem(storageKey, JSON.stringify(json))
+      localStorage.setItem(storageKey, JSON.stringify(json))
     },
-    clear: (scores: Map<string, number>) => {
+    clear: (scores: Map<string, Score>) => {
       scores.clear()
-      storage.removeItem(storageKey)
+      localStorage.setItem(storageKey, '{}')
     },
   } as const
 }

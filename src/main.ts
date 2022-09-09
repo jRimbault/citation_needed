@@ -17,12 +17,6 @@ function main({ add, reset, save, playerName, playerList }: StaticHtml) {
     state.clear(scores)
   })
   save.addEventListener('click', () => state.set(scores))
-  prefetchDing()
-}
-
-function prefetchDing() {
-  DING.volume = 0
-  DING.play().then(() => (DING.volume = 100))
 }
 
 function initialPlayingBoard(scores: Map<string, Score>) {

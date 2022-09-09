@@ -5,7 +5,7 @@ interface Score {
   score: number
 }
 
-const DING = new Audio('sounds/ding-sound-effect_2.mp3')
+const DING = 'sounds/ding-sound-effect_2.mp3'
 
 function main({ add, reset, save, playerName, playerList }: StaticHtml) {
   const state = stateManager()
@@ -49,7 +49,7 @@ function makePlayerListItem(playerName: string, scores: Map<string, Score>) {
             click: () => {
               playerScore.score += 1
               scoreNode.textContent = playerScore.score.toString()
-              ;(DING.cloneNode(true) as HTMLAudioElement).play()
+              new Audio(DING).play()
             },
           },
         },

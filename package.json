@@ -5,6 +5,7 @@
     "format": "rome format --write src",
     "lint": "rome check src",
     "ci": "rome ci src",
+    "tsc": "tsc --noEmit",
     "watch": "npm run build -- --watch",
     "build": "esbuild src/main.ts --bundle --minify --sourcemap --outfile=assets/dist/bundle.js"
   },

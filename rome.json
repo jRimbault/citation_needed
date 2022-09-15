@@ -1,0 +1,10 @@
+{
+    "formatter": {
+        "indentStyle": "space",
+        "indentSize": 2,
+        "lineWidth": 80
+    },
+    "linter": {
+        "enabled": true
+    }
+}

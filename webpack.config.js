@@ -1,29 +1,31 @@
-const path = require('path');
+const path = require("path");
 
 module.exports = {
-  mode: process.env.NODE_ENV || 'development',
-  entry: './src/main.ts',
-  devtool: 'source-map',
+  mode: process.env.NODE_ENV || "development",
+  entry: "./src/main.ts",
+  devtool: "source-map",
   devServer: {
     contentBase: __dirname,
-    publicPath: '/assets/dist/',
+    publicPath: "/assets/dist/",
   },
   module: {
-    rules: [{
-      test: /\.ts?$/,
-      use: 'ts-loader',
-      exclude: /node_modules/,
-    }],
+    rules: [
+      {
+        test: /\.ts?$/,
+        use: "ts-loader",
+        exclude: /node_modules/,
+      },
+    ],
   },
   resolve: {
     modules: [
-      path.resolve(__dirname, 'src'),
-      path.resolve(__dirname, 'node_modules'),
+      path.resolve(__dirname, "src"),
+      path.resolve(__dirname, "node_modules"),
     ],
-    extensions: ['.js', '.ts'],
+    extensions: [".js", ".ts"],
   },
   output: {
-    filename: 'bundle.js',
-    path: path.resolve(__dirname, 'assets/dist'),
-  }
+    filename: "bundle.js",
+    path: path.resolve(__dirname, "assets/dist"),
+  },
 };

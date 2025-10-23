@@ -45,15 +45,24 @@ function makePlayerListItem(playerName: string, scores: Map<string, Score>) {
     .get(playerName);
   assert(playerScore !== undefined);
   const scoreNode = createNode("span", {
+    classList: "player-score",
     textContent: playerScore.score.toString(),
   });
   return createNode("li", {
-    textContent: `${playerName} : `,
+    classList: "player-item",
     children: [
+      [
+        "span",
+        {
+          classList: "player-name",
+          textContent: playerName,
+        },
+      ],
       scoreNode,
       [
         "button",
         {
+          classList: "score-button",
           textContent: "+1",
           listeners: {
             click: () => {

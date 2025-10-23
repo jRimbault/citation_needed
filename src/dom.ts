@@ -1,3 +1,4 @@
+/** Utility helpers for type-safe DOM creation and interaction. */
 type EventNames = keyof HTMLElementEventMap;
 type Handler<Event extends EventNames> = (
   this: HTMLObjectElement,
@@ -7,12 +8,21 @@ type EventHandler<Event extends EventNames> =
   | readonly [Handler<Event>, boolean | EventListenerOptions]
   | Handler<Event>;
 
+/**
+ * Declarative descriptor for children accepted by `createNode`.
+ * Allows mixing existing DOM nodes with light-weight `[tag, options]` tuples.
+ */
 export type NodeDefinition =
   | readonly [keyof HTMLElementTagNameMap, NodeOptions]
   | readonly [keyof HTMLElementTagNameMap]
   | Node;
 
-export interface NodeOptions {
+/**
+ * Configuration applied by `createNode` when constructing elements,
+ * covering ids, class names, safe text/HTML content, attributes, children,
+ * and typed event listeners.
+ */
+export type NodeOptions = {
   readonly id?: string;
   readonly classList?: string | readonly string[];
   readonly textContent?: string | { readonly html: string };
@@ -21,8 +31,13 @@ export interface NodeOptions {
   readonly listeners?: {
     readonly [Event in EventNames]?: EventHandler<Event>;
   };
-}
+};
 
+/**
+ * Create a DOM element of the requested tag, applying the supplied `NodeOptions`
+ * (id, classes, attributes, content, children, event listeners) and returning
+ * the correctly typed `HTMLElement`.
+ */
 export function createNode<Tag extends keyof HTMLElementTagNameMap>(
   tag: Tag,
   options?: NodeOptions,
@@ -72,7 +87,7 @@ function addListeners<E extends HTMLElement>(
 ): E {
   if (listeners) {
     for (const [name, listener] of Object.entries(listeners) as Entry[]) {
-      if (listener instanceof Array) {
+      if (Array.isArray(listener)) {
         node.addEventListener(name, listener[0], listener[1]);
       } else if (listener instanceof Function) {
         node.addEventListener(name, listener);
@@ -134,7 +149,7 @@ function addClasses<E extends HTMLElement>(
     if (typeof classList === "string" && classList !== "") {
       node.classList.add(classList);
     }
-    if (classList instanceof Array) {
+    if (Array.isArray(classList)) {
       node.classList.add(...classList.filter(Boolean));
     }
   }

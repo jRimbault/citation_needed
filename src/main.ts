@@ -1,4 +1,4 @@
-import { createNode } from "dom";
+import { createNode } from "@/dom";
 
 type StaticHtml = ReturnType<typeof getStaticHtmlElements>;
 interface Score {
@@ -20,9 +20,8 @@ function main({ add, reset, save, playerName, playerList }: StaticHtml) {
 }
 
 function initialPlayingBoard(scores: Map<string, Score>) {
-  return Array.from(
-    scores.keys(),
-    (playerName) => makePlayerListItem(playerName, scores),
+  return Array.from(scores.keys(), (playerName) =>
+    makePlayerListItem(playerName, scores),
   );
 }
 
@@ -41,10 +40,9 @@ function addPlayer(
 }
 
 function makePlayerListItem(playerName: string, scores: Map<string, Score>) {
-  const playerScore = scores.set(
-    playerName,
-    scores.get(playerName) ?? { score: 0 },
-  ).get(playerName);
+  const playerScore = scores
+    .set(playerName, scores.get(playerName) ?? { score: 0 })
+    .get(playerName);
   assert(playerScore !== undefined);
   const scoreNode = createNode("span", {
     textContent: playerScore.score.toString(),

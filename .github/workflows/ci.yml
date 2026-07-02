@@ -2,14 +2,30 @@ name: CI
 
 on: [push]
 
+# deploy-pages exchanges an OIDC token, which needs id-token: write; pages:
+# write authorizes the deployment itself. Without these the deploy job fails
+# with "Unable to get ACTIONS_ID_TOKEN_REQUEST_URL".
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow only one in-flight Pages deployment; let a running one finish.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
 jobs:
   all:
     name: Continuous Integration
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
       - name: Install dependencies
         run: npm ci
       - name: Run formatter

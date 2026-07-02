@@ -290,7 +290,9 @@ button:focus-visible {
   font-size: 0.95rem;
 }
 
-/* Responsive: stack the form, keep the scoreboard rows readable. */
+/* Responsive: the game predates phones-as-hosts, so treat a thumb on a narrow
+ * screen as a first-class driver - stacked form, full-width form buttons, and
+ * generous tap targets. */
 @media (max-width: 600px) {
   :root {
     font-size: 15px;
@@ -304,11 +306,37 @@ button:focus-visible {
     flex-direction: column;
   }
 
-  button {
+  /* In a column form the flex-basis becomes a *height*: pin the input to its
+   * content so it does not balloon into a giant box. 16px text keeps iOS
+   * Safari from auto-zooming when the field is focused. */
+  input[type="text"] {
+    flex: 0 0 auto;
     width: 100%;
+    font-size: 16px;
+  }
+
+  /* Only the form's controls go full width - not the per-row score buttons. */
+  form button {
+    width: 100%;
+    min-height: 44px;
   }
 
   .player-item {
     gap: var(--spacing-sm);
+  }
+
+  /* Thumb-sized award controls. */
+  .score-button,
+  .score-button-minus {
+    min-width: 52px;
+    min-height: 44px;
+  }
+
+  /* Give remove real breathing room from +1 so it is not fat-fingered mid-game,
+   * and make its own hit area thumb-sized. */
+  .remove-button {
+    min-width: 44px;
+    min-height: 44px;
+    margin-left: var(--spacing-xs);
   }
 }

@@ -7,12 +7,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   <title>Citation Needed</title>
-  <meta name="description" content="Jacques Rimbault's Curriculm Vitae">
+  <meta name="description" content="A score counter for playing Citation Needed, the panel game from Tom Scott and the Technical Difficulties.">
   <link rel="stylesheet" href="/src/style.css">
   <script type="module" src="/src/main.ts"></script>
 </head>
 
 <body>
+  <header>
+    <h1>Citation <span class="cn-accent">Needed</span></h1>
+  </header>
   <details>
     <summary>
       Rules
@@ -28,11 +31,11 @@
   </details>
   <p>Choose a <a href="https://en.wikipedia.org/wiki/Special:Random" target="blank">random Wikipedia article</a>.</p>
   <form onsubmit="event.preventDefault()">
-    <input type="text" placeholder="Player name" id="player-name">
+    <input type="text" placeholder="Player name" id="player-name" autocomplete="off">
     <button id="add-player">Add player</button>
-    <button id="save">Save</button>
-    <button id="reset">Clear saved data</button>
+    <button id="reset" type="button">Reset scores</button>
   </form>
+  <p id="form-message" role="status" aria-live="polite"></p>
   <ul id="player-list">
   </ul>
 </body>

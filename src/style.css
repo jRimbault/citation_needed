@@ -1,47 +1,35 @@
-/* Citation Needed - Panel Show Aesthetic */
-
-/* Color Palette inspired by British quiz shows:
- * - Deep navy/charcoal backgrounds
- * - Crisp white text
- * - Accent colors for interactivity
- * - Subtle shadows for depth
+/* Citation Needed - Tom Scott design language
+ *
+ * Reference: https://www.tomscott.com/
+ * The look is deliberately spare: a clean white page, dark charcoal text set
+ * in a plain sans-serif, and one signature crimson red doing all of the accent
+ * work. Structure comes from generous whitespace, not from boxes and borders.
  */
 
 :root {
-  --color-background: #1a1d2e;
-  --color-surface: #252941;
-  --color-surface-elevated: #2d3250;
-  --color-primary: #4a90e2;
-  --color-primary-dark: #357abd;
-  --color-accent: #7b68ee;
-  --color-text: #f5f7fa;
-  --color-text-muted: #a0a8b8;
-  --color-success: #4caf50;
-  --color-success-dark: #388e3c;
-  --color-danger: #e74c3c;
-  --color-border: #3a3f5c;
+  /* The single accent: Tom Scott's signature crimson. */
+  --color-accent: #c02c38;
+  --color-accent-dark: #9c1f2a;
 
-  --font-family-base: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  --font-family-display: "Georgia", "Times New Roman", serif;
+  --color-background: #ffffff;
+  --color-text: #1a1a1a;
+  --color-text-muted: #666666;
+  --color-rule: #e6e6e6;
+  --color-surface-hover: #f7f7f7;
+
+  /* One sans-serif family throughout - no serifs, no display face. */
+  --font-family-base: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Helvetica, Arial, sans-serif;
 
   --spacing-xs: 0.25rem;
   --spacing-sm: 0.5rem;
   --spacing-md: 1rem;
   --spacing-lg: 1.5rem;
-  --spacing-xl: 2rem;
+  --spacing-xl: 2.5rem;
 
-  --border-radius: 8px;
-  --border-radius-sm: 4px;
-
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
-  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.4);
-  --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.5);
-
-  --transition-fast: 150ms ease-in-out;
-  --transition-normal: 250ms ease-in-out;
+  --border-radius: 4px;
 }
 
-/* Global Styles */
 * {
   box-sizing: border-box;
   margin: 0;
@@ -56,264 +44,264 @@ html {
 body {
   font-family: var(--font-family-base);
   color: var(--color-text);
-  background: linear-gradient(135deg, var(--color-background) 0%, #0f1119 100%);
+  background: var(--color-background);
   min-height: 100vh;
-  padding: var(--spacing-xl);
+  padding: var(--spacing-xl) var(--spacing-lg);
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-/* Typography */
-h1, h2, h3 {
-  font-family: var(--font-family-display);
-  font-weight: 600;
-  line-height: 1.2;
-}
-
-/* Main Container */
+/* Single centred column with breathing room, no visible container. */
 body > * {
   width: 100%;
-  max-width: 800px;
+  max-width: 720px;
 }
 
-/* Details/Summary - Rules Section */
+/* Header / wordmark */
+header {
+  margin-bottom: var(--spacing-xl);
+}
+
+h1 {
+  font-weight: 700;
+  font-size: 2.5rem;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+/* The accent word gets the signature red - the one splash of colour. */
+.cn-accent {
+  color: var(--color-accent);
+}
+
+/* Links: red, underlined - Tom Scott's plain, unfussy link style. */
+a {
+  color: var(--color-accent);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+a:hover {
+  color: var(--color-accent-dark);
+}
+
+/* Rules disclosure - kept flat, separated by whitespace and a thin rule. */
 details {
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--border-radius);
-  padding: var(--spacing-md);
-  margin-bottom: var(--spacing-lg);
-  box-shadow: var(--shadow-sm);
+  margin-bottom: var(--spacing-xl);
+  padding-bottom: var(--spacing-lg);
+  border-bottom: 1px solid var(--color-rule);
 }
 
 summary {
-  font-family: var(--font-family-base);
-  font-size: 1.25rem;
+  font-size: 1.1rem;
   font-weight: 600;
   cursor: pointer;
   user-select: none;
-  padding: var(--spacing-sm);
-  margin: calc(-1 * var(--spacing-sm));
-  border-radius: var(--border-radius-sm);
-  transition: background-color var(--transition-fast);
+  list-style-position: outside;
 }
 
 summary:hover {
-  background-color: var(--color-surface-elevated);
-}
-
-details[open] summary {
-  margin-bottom: var(--spacing-md);
-  border-bottom: 1px solid var(--color-border);
-  padding-bottom: var(--spacing-md);
+  color: var(--color-accent);
 }
 
 details p {
   margin-top: var(--spacing-md);
   color: var(--color-text-muted);
-  line-height: 1.7;
 }
 
-details p:first-of-type {
-  margin-top: 0;
-}
-
-/* Links */
-a {
-  color: var(--color-primary);
-  text-decoration: none;
-  transition: color var(--transition-fast);
-  border-bottom: 1px solid transparent;
-}
-
-a:hover {
-  color: var(--color-accent);
-  border-bottom-color: var(--color-accent);
-}
-
-/* Paragraphs */
+/* Intro paragraph */
 body > p {
-  background: var(--color-surface);
-  padding: var(--spacing-md) var(--spacing-lg);
-  border-radius: var(--border-radius);
   margin-bottom: var(--spacing-lg);
-  border: 1px solid var(--color-border);
-  box-shadow: var(--shadow-sm);
+  color: var(--color-text);
 }
 
-/* Form Styling */
+/* Form - inputs and controls sit on the white page, no card. */
 form {
-  background: var(--color-surface);
-  padding: var(--spacing-lg);
-  border-radius: var(--border-radius);
-  margin-bottom: var(--spacing-xl);
-  border: 1px solid var(--color-border);
-  box-shadow: var(--shadow-md);
   display: flex;
   flex-wrap: wrap;
-  gap: var(--spacing-md);
+  gap: var(--spacing-sm);
   align-items: stretch;
+  margin-bottom: var(--spacing-xl);
+  padding-bottom: var(--spacing-xl);
+  border-bottom: 1px solid var(--color-rule);
 }
 
-/* Input Styling */
 input[type="text"] {
-  flex: 1 1 250px;
-  font-family: var(--font-family-base);
+  flex: 1 1 240px;
+  font-family: inherit;
   font-size: 1rem;
-  padding: var(--spacing-md);
-  background: var(--color-surface-elevated);
+  padding: var(--spacing-sm) var(--spacing-md);
   color: var(--color-text);
-  border: 2px solid var(--color-border);
-  border-radius: var(--border-radius-sm);
-  transition: all var(--transition-normal);
+  background: var(--color-background);
+  border: 1px solid #cccccc;
+  border-radius: var(--border-radius);
 }
 
 input[type="text"]:focus {
   outline: none;
-  border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2);
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 2px rgba(192, 44, 56, 0.15);
 }
 
 input[type="text"]::placeholder {
   color: var(--color-text-muted);
-  opacity: 0.7;
 }
 
-/* Button Styling */
+/* Buttons: solid crimson primary, quiet ghost secondaries. */
 button {
-  font-family: var(--font-family-base);
+  font-family: inherit;
   font-size: 0.95rem;
   font-weight: 600;
-  padding: var(--spacing-md) var(--spacing-lg);
-  background: var(--color-primary);
-  color: white;
-  border: none;
-  border-radius: var(--border-radius-sm);
+  padding: var(--spacing-sm) var(--spacing-lg);
   cursor: pointer;
-  transition: all var(--transition-normal);
-  box-shadow: var(--shadow-sm);
+  border-radius: var(--border-radius);
   white-space: nowrap;
+  transition: background-color 120ms ease, color 120ms ease;
 }
 
-button:hover {
-  background: var(--color-primary-dark);
-  box-shadow: var(--shadow-md);
-  transform: translateY(-1px);
-}
-
-button:active {
-  transform: translateY(0);
-  box-shadow: var(--shadow-sm);
-}
-
-button:focus {
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.3);
-}
-
-/* Specific button styles */
+/* Primary action: add a player. */
 #add-player {
-  background: var(--color-success);
+  background: var(--color-accent);
+  color: #ffffff;
+  border: 1px solid var(--color-accent);
 }
 
 #add-player:hover {
-  background: var(--color-success-dark);
+  background: var(--color-accent-dark);
+  border-color: var(--color-accent-dark);
 }
 
+/* Secondary, low-emphasis controls: outline only. */
+#save,
 #reset {
-  background: var(--color-danger);
+  background: transparent;
+  color: var(--color-text);
+  border: 1px solid #cccccc;
 }
 
+#save:hover,
 #reset:hover {
-  background: #c0392b;
+  background: var(--color-surface-hover);
 }
 
-#save {
-  background: var(--color-accent);
+/* Destructive action still reads as red on hover, not by default. */
+#reset:hover {
+  color: var(--color-accent);
+  border-color: var(--color-accent);
 }
 
-#save:hover {
-  background: #6a57d9;
+button:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
 }
 
-/* Player List */
+/* Player list - a plain scoreboard, rows divided by thin rules. */
 #player-list {
   list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-md);
 }
 
 .player-item {
-  background: var(--color-surface);
-  padding: var(--spacing-lg);
-  border-radius: var(--border-radius);
-  border: 1px solid var(--color-border);
-  box-shadow: var(--shadow-md);
   display: flex;
   align-items: center;
   gap: var(--spacing-md);
-  transition: all var(--transition-normal);
+  /* Reserve the left rail space on every row so the leader highlight can be
+   * toggled without shifting any text sideways. */
+  padding: var(--spacing-md) 0 var(--spacing-md) var(--spacing-md);
+  border-bottom: 1px solid var(--color-rule);
 }
 
-.player-item:hover {
-  border-color: var(--color-primary);
-  box-shadow: var(--shadow-lg);
-}
-
-/* Player name styling */
 .player-name {
-  font-family: var(--font-family-base);
-  font-size: 1.125rem;
-  font-weight: 500;
-  color: var(--color-text);
   flex: 1;
+  font-size: 1.2rem;
+  font-weight: 500;
 }
 
-/* Player score styling */
+/* The score reads across a room: large, and in the signature red. */
 .player-score {
-  font-family: var(--font-family-base);
-  font-size: 1.75rem;
+  font-size: 2rem;
   font-weight: 700;
-  color: var(--color-primary);
+  color: var(--color-accent);
   min-width: 3ch;
   text-align: right;
-  padding: var(--spacing-xs) var(--spacing-md);
-  background: var(--color-surface-elevated);
-  border-radius: var(--border-radius-sm);
-  border: 1px solid var(--color-border);
+  font-variant-numeric: tabular-nums;
 }
 
-/* Score button */
+/* The +1 that makes the *ding* - the primary award. */
 .score-button {
-  font-size: 1.125rem;
-  font-weight: 700;
-  padding: var(--spacing-md) var(--spacing-lg);
-  min-width: 70px;
-  background: var(--color-success);
+  min-width: 56px;
+  font-size: 1.1rem;
+  background: var(--color-accent);
+  color: #ffffff;
+  border: 1px solid var(--color-accent);
 }
 
 .score-button:hover {
-  background: var(--color-success-dark);
+  background: var(--color-accent-dark);
+  border-color: var(--color-accent-dark);
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
+/* -1 to undo a mis-tap: quiet outline, not competing with +1. */
+.score-button-minus {
+  min-width: 56px;
+  font-size: 1.1rem;
+  background: transparent;
+  color: var(--color-text-muted);
+  border: 1px solid #cccccc;
+}
+
+.score-button-minus:hover {
+  color: var(--color-text);
+  background: var(--color-surface-hover);
+}
+
+/* Per-player remove: the lightest control on the row. */
+.remove-button {
+  font-size: 1.2rem;
+  line-height: 1;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  background: transparent;
+  color: var(--color-text-muted);
+  border: 1px solid transparent;
+}
+
+.remove-button:hover {
+  color: var(--color-accent);
+  border-color: var(--color-rule);
+}
+
+/* Leader highlight: a red rail drawn inside the reserved left padding, so
+ * toggling it never changes layout or nudges the text. Colour, not weight,
+ * marks the name - bolding would change glyph metrics. */
+.player-item.leader {
+  box-shadow: inset 3px 0 0 0 var(--color-accent);
+}
+
+.player-item.leader .player-name {
+  color: var(--color-accent);
+}
+
+/* Inline feedback for empty/duplicate names. */
+#form-message {
+  min-height: 1.4em;
+  margin-top: calc(-1 * var(--spacing-md));
+  margin-bottom: var(--spacing-md);
+  color: var(--color-accent);
+  font-size: 0.95rem;
+}
+
+/* Responsive: stack the form, keep the scoreboard rows readable. */
+@media (max-width: 600px) {
   :root {
-    font-size: 14px;
+    font-size: 15px;
   }
 
-  body {
-    padding: var(--spacing-md);
+  h1 {
+    font-size: 2rem;
   }
 
   form {
     flex-direction: column;
-  }
-
-  input[type="text"] {
-    flex: 1 1 auto;
   }
 
   button {
@@ -321,34 +309,6 @@ button:focus {
   }
 
   .player-item {
-    flex-direction: column;
-    gap: var(--spacing-md);
-    text-align: center;
-  }
-
-  .player-name {
-    text-align: center;
-  }
-
-  .player-score {
-    text-align: center;
-  }
-
-  .score-button {
-    width: 100%;
+    gap: var(--spacing-sm);
   }
 }
-
-/* Utility Classes for Future Use */
-.text-center {
-  text-align: center;
-}
-
-.text-muted {
-  color: var(--color-text-muted);
-}
-
-.mt-1 { margin-top: var(--spacing-md); }
-.mb-1 { margin-bottom: var(--spacing-md); }
-.mt-2 { margin-top: var(--spacing-lg); }
-.mb-2 { margin-bottom: var(--spacing-lg); }

@@ -87,27 +87,16 @@ a:hover {
 }
 
 /* Rules disclosure - kept flat, separated by whitespace and a thin rule. */
-details {
-  margin-bottom: var(--spacing-xl);
+/* Rules - stated plainly on the page rather than tucked behind a disclosure. */
+.rules {
+  margin-bottom: var(--spacing-lg);
   padding-bottom: var(--spacing-lg);
   border-bottom: 1px solid var(--color-rule);
-}
-
-summary {
-  font-size: 1.1rem;
-  font-weight: 600;
-  cursor: pointer;
-  user-select: none;
-  list-style-position: outside;
-}
-
-summary:hover {
-  color: var(--color-accent);
-}
-
-details p {
-  margin-top: var(--spacing-md);
   color: var(--color-text-muted);
+}
+
+.rules p + p {
+  margin-top: var(--spacing-md);
 }
 
 /* Intro paragraph */

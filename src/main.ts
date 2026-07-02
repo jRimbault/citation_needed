@@ -22,7 +22,8 @@ interface Score {
   score: number;
 }
 
-const DING = "sounds/ding-sound-effect_2.mp3";
+// Served from public/ under the deploy base (e.g. /citation_needed/sounds/...).
+const DING = `${import.meta.env.BASE_URL}sounds/ding-sound-effect_2.mp3`;
 
 /** Preloaded once; cloned per play so rapid dings can overlap cleanly. */
 const dingSound = new Audio(DING);

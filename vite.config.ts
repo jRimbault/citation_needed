@@ -3,6 +3,9 @@ import { resolve } from 'path';
 
 export default defineConfig({
   root: '.',
+  // Deployed under a GitHub Pages project subpath (jrimbault.io/citation_needed/),
+  // so assets must be referenced from there, not the domain root.
+  base: '/citation_needed/',
   build: {
     outDir: 'build',
     emptyOutDir: true,
